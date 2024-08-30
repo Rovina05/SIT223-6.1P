@@ -67,10 +67,10 @@ pipeline {
             echo 'Pipeline failed!'
         }
         always {
-            // Send email notifications at the end of test and security scan stages
+            // Send email notifications at the end of the pipeline
             script {
                 emailext(
-                    to: 'developer@example.com',
+                    to: 'loborovina45@gmail.com', // Replace with your actual email address
                     subject: "Jenkins Pipeline Status: ${currentBuild.fullDisplayName}",
                     body: """
                         Pipeline ${currentBuild.fullDisplayName} completed with status: ${currentBuild.currentResult}.
