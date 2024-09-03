@@ -5,56 +5,86 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                // Example: Use a build tool like Maven or Gradle
-                // sh 'mvn clean package'
+                echo 'Tool used: Maven '
+                
             }
         }
 
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running Unit and Integration Tests...'
-                // Example: Use JUnit, TestNG, or any other testing framework
-                // sh 'mvn test'
+                echo 'Tools used: JUnit, TestNG'
+                
+            }
+            post {
+                always {
+                    script {
+                        emailext(
+                            to: 'loborovina45@gmail.com',
+                            subject: "Unit and Integration Tests Completed: ${currentBuild.fullDisplayName}",
+                            body: """
+                                The Unit and Integration Tests stage has completed with status: ${currentBuild.currentResult}.
+                                Please check Jenkins for detailed logs.
+                            """,
+                            attachLog: true
+                        )
+                    }
+                }
             }
         }
 
         stage('Code Analysis') {
             steps {
                 echo 'Performing Code Analysis...'
-                // Example: Use SonarQube or similar tools for static code analysis
-                // sh 'mvn sonar:sonar'
+                echo 'Tool used: SonarQube'
+                
             }
         }
 
         stage('Security Scan') {
             steps {
                 echo 'Performing Security Scan...'
-                // Example: Use OWASP Dependency Check or similar tools
-                // sh 'mvn dependency-check:check'
+                echo 'Tool used: OWASP Dependency Check'
+                
+            }
+            post {
+                always {
+                    script {
+                        emailext(
+                            to: 'loborovina45@gmail.com',
+                            subject: "Security Scan Completed: ${currentBuild.fullDisplayName}",
+                            body: """
+                                The Security Scan stage has completed with status: ${currentBuild.currentResult}.
+                                Please check Jenkins for detailed logs.
+                            """,
+                            attachLog: true
+                        )
+                    }
+                }
             }
         }
 
         stage('Deploy to Staging') {
             steps {
                 echo 'Deploying to Staging...'
-                // Example: Use a script or tool to deploy to a staging environment
-                // sh './deploy-scripts/deploy-to-staging.sh'
+                echo 'Tool used: Custom deployment scripts'
+                
             }
         }
 
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running Integration Tests on Staging...'
-                // Example: Run integration tests on the staging environment
-                // sh './integration-tests/run-tests.sh'
+                echo 'Tool used: Custom integration test scripts'
+                
             }
         }
 
         stage('Deploy to Production') {
             steps {
                 echo 'Deploying to Production...'
-                // Example: Use a script or tool to deploy to the production environment
-                // sh './deploy-scripts/deploy-to-production.sh'
+                echo 'Tool used: Custom deployment scripts'
+                
             }
         }
     }
@@ -65,20 +95,6 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed!'
-        }
-        always {
-            // Send email notifications at the end of the pipeline
-            script {
-                emailext(
-                    to: 'loborovina45@gmail.com', // Replace with your actual email address
-                    subject: "Jenkins Pipeline Status: ${currentBuild.fullDisplayName}",
-                    body: """
-                        Pipeline ${currentBuild.fullDisplayName} completed with status: ${currentBuild.currentResult}.
-                        Please check Jenkins for detailed logs.
-                    """,
-                    attachLog: true
-                )
-            }
         }
     }
 }
